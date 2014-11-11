@@ -1,0 +1,11 @@
+# Features:
+#  - define feed(s) to watch
+#  - define keywords to look for
+#  - poll each feed every n minutes
+#  - alert (email?) user if keyword is found
+#  - for feed watch:
+#    - get the RSS contents
+#    - parse RSS items
+#    - for each, check title, summary, tags, content for keywords
+#    - if found, put everything in a blob and send to user
+
