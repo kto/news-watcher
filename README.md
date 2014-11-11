@@ -1,4 +1,4 @@
-Uutisvahti
-==========
+News Watcher
+============
 
-Tarkistaa tasaisin väliajoin löytyykö annetuista syötteistä määriteltyjä avainsanoja. Mikäli avainsana löytyy, ilmoittaa siitä käyttäjälle.
+Periodically watch news feeds for keywords. Alert user if keywords found from feed contents.
