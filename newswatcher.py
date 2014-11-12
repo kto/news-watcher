@@ -22,10 +22,10 @@ def main():
                         help='Interval (in minutes) how often to update feed (default: 10 minutes)')
 
     args = parser.parse_args()
-    np = newsparser.NewsParser(feeds=args.feeds.split(','),
-                               keywords=args.keywords.split(','),
-                               check_interval=args.interval,
-                               alert_callback=alert_callback)
+    newsparser.NewsParser(feeds=args.feeds.split(','),
+                          keywords=args.keywords.split(','),
+                          check_interval=args.interval,
+                          alert_callback=alert_callback)
 
 if __name__ == "__main__":
     main()

@@ -59,7 +59,6 @@ class TestNewsParser(unittest.TestCase):
         self.assertTrue('http://another.feed' in self.np.feeds)
 
     def test_adding_same_feed_twice(self):
-        test_feed = self.get_test_feed()
         self.np.add_feed('http://test.feed')
         self.np.add_feed('http://test.feed')
         self.assertEquals(1, len(self.np.feeds))

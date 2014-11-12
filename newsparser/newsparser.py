@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import feedparser
-import time
 from threading import Timer
 
 
@@ -22,45 +21,45 @@ class NewsParser():
     def set_alert_callback(self, alert_callback):
         self.alert_callback = alert_callback
 
+    def parse_entry_for_alert(self, entry, content=None):
+        entry_key = u'{0}-{1}'.format(entry['title'], entry['link'])
+        if entry_key not in self.sent_alerts:
+            entry_summary = ''
+            entry_content = ''
+            if 'summary' in entry:
+                entry_summary = entry['summary']
+
+            if content:
+                entry_content = content
+            elif 'content' in entry:
+                entry_content = entry['content'][0]['value']
+
+            return ({'title': entry['title'],
+                           'link': entry['link'],
+                           'summary': entry_summary,
+                           'content': entry_content})
+            self.sent_alerts.append(entry_key)
+
     def check_keywords(self, feed):
         alerts = []
-
-        def update_alerts(entry, content=None):
-            entry_key = u'{0}-{1}'.format(entry['title'], entry['link'])
-            if entry_key not in self.sent_alerts:
-                entry_summary = ''
-                entry_content = ''
-                if 'summary' in entry:
-                    entry_summary = entry['summary']
-
-                if content:
-                    entry_content = content
-                elif 'content' in entry:
-                    entry_content = entry['content'][0]['value']
-
-                alerts.append({'title': entry['title'],
-                               'link': entry['link'],
-                               'summary': entry_summary,
-                               'content': entry_content})
-                self.sent_alerts.append(entry_key)
 
         for entry in feed.entries:
             for keyword in self.keywords:
                 if 'summary' in entry and keyword in entry['summary']:
-                    update_alerts(entry)
+                    alerts.append(self.parse_entry_for_alert(entry))
                     break
                 if keyword in entry['title']:
-                    update_alerts(entry)
+                    alerts.append(self.parse_entry_for_alert(entry))
                     break
                 if 'content' in entry:
                     for content in entry['content']:
                         if keyword in content['value']:
-                            update_alerts(entry, content=content['value'])
+                            alerts.append(self.parse_entry_for_alert(entry, content=content['value']))
                             break
                 if 'tags' in entry:
                     for tag in entry['tags']:
                         if keyword in tag['term']:
-                            update_alerts(entry)
+                            alerts.append(self.parse_entry_for_alert(entry))
                             break
 
         if alerts:
