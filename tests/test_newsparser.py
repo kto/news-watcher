@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 import feedparser
 from mock import Mock
@@ -28,6 +29,7 @@ class TestNewsParser(unittest.TestCase):
         test_feed.entries = [{'title': 'lorem ipsum test title_keyword',
                               'content': [{'value': 'test contents, content_keyword'}],
                               'summary': 'test summary, summary_keyword',
+                              'link': 'http://just.a.test.link',
                               'tags': [{'label': None,
                                         'scheme': None,
                                         'term': u'tag_keyword'}]}]
@@ -109,9 +111,9 @@ class TestNewsParser(unittest.TestCase):
     def test_alert_sent_when_keywords_found_in_title(self):
         self.alert_func_called = False
 
-        def alert_func(feed):
+        def alert_func(feed_entries):
             self.alert_func_called = True
-            self.assertEquals('http://test.feed', feed.link)
+            self.assertTrue('title_keyword' in feed_entries[0]['title'])
 
         test_feed = self.get_test_feed()
         self.np.set_alert_callback(alert_func)
@@ -122,7 +124,7 @@ class TestNewsParser(unittest.TestCase):
     def test_no_alert_sent_when_keywords_not_found(self):
         self.alert_func_called = False
 
-        def alert_func(feed):
+        def alert_func(feed_entries):
             self.alert_func_called = True
 
         test_feed = self.get_test_feed()
